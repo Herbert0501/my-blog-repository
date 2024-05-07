@@ -1,3 +1,30 @@
-<p style="">MySQL 的架构大致可分为两层：<strong>Server 层</strong> 和 <strong>存储引擎层</strong>。</p><h2 style="" id="server-%E5%B1%82%EF%BC%9A"><strong>Server 层：</strong></h2><p style="">Server 层是MySQL的核心，负责处理大多数的核心服务功能，如连接器、查询缓存、预处理器、优化器、执行器以及所有的内置函数（如数学、日期和时间、加密函数）等。此外，还有跨存储引擎的功能（如存储过程、触发器、视图等）。</p><h2 style="" id="%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%E5%B1%82%EF%BC%9A"><strong>存储引擎层：</strong></h2><p style="">存储引擎层是 MySQL 数据存储和管理的核心部分。MySQL 支持多种存储引擎，每种存储引擎都有其特定的存储格式、索引方式和管理策略。最常见的存储引擎包括 InnoDB、MyISAM 和 Memory 等。</p><p style="">每种存储引擎都有其使用的场景。如，InnoDB 提供了事务支持、行级锁定和外键约束等特性，适用于需要高并发和复杂事务处理的场景；而 MyISAM 则提供了全文索引和压缩功能，适用于只读或大量读操作的场景。</p><hr><p style="">那么，执行一条SQL查询语句，期间发生了什么？</p><h3 style="" id="%E8%BF%9E%E6%8E%A5%E5%99%A8%EF%BC%9A"><strong>连接器：</strong> </h3><p style="">处理客户端的连接请求，验证用户身份，管理连接的生命周期。</p><h3 style="" id="%E6%9F%A5%E8%AF%A2%E7%BC%93%E5%AD%98%EF%BC%9A"><strong>查询缓存：</strong> </h3><p style="">如果直接命中缓存，则直接返回结果，否则继续往下执行。在 MySQL 8.0 版本后移除。</p><h3 style="" id="%E8%A7%A3%E6%9E%90%E5%99%A8%EF%BC%9A"><strong>解析器：</strong> </h3><p style="">负责对SQL语句进行词法、语法分析，并将SQL语句解析成语法树，为后续的优化和执行做准备。</p><h3 style="" id="%E6%89%A7%E8%A1%8Csql%EF%BC%9A"><strong>执行SQL：</strong></h3><p style="margin-left: 24px!important;">1. <strong>预处理阶段（Prepare）：</strong> 验证表或字段是否存在；扩展通配符（如把 <code>SELECT *</code> 扩展为具体的列名）。</p><p style="margin-left: 24px!important;">2. <strong>优化阶段（Optimize）</strong>：选择最佳的查询执行计划。这个过程会考虑多种因素，如索引的使用、连接顺序、聚合操作等。</p><p style="margin-left: 24px!important;">3. <strong>执行阶段（Execute）</strong>：根据优化后的执行计划来执行 SQL 查询语句，将结果返回客户端（如果涉及多个表，还会进行整合处理）。</p><p style=""></p><div class="html-edited"><div style="text-align: center; margin-top: 30px;">  
-  以上是结合学习<a href="https://xiaolincoding.com/mysql/base/how_select.html" target="_blank">小林coding</a>  
-自己也概括的一些总结</div></div><p style=""><img src="https://image.kangyaocoding.top/blog/post/2024-04-18T22:04:21-eqwlcglv.webp" alt="2024-04-18T22:04:21-eqwlcglv.webp" width="100%" height="100%" style="display: inline-block"></p>
+<p style="">MySQL 的架构大致可分为两层：<strong>Server 层</strong> 和 <strong>存储引擎层</strong>。</p>
+<h2 style="" id="server-%E5%B1%82%EF%BC%9A"><strong>Server 层：</strong></h2>
+<p style="">Server
+  层是MySQL的核心，负责处理大多数的核心服务功能，如连接器、查询缓存、预处理器、优化器、执行器以及所有的内置函数（如数学、日期和时间、加密函数）等。此外，还有跨存储引擎的功能（如存储过程、触发器、视图等）。</p>
+<h2 style="" id="%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%E5%B1%82%EF%BC%9A"><strong>存储引擎层：</strong></h2>
+<p style="">存储引擎层是 MySQL 数据存储和管理的核心部分。MySQL 支持多种存储引擎，每种存储引擎都有其特定的存储格式、索引方式和管理策略。最常见的存储引擎包括 InnoDB、MyISAM 和 Memory 等。</p>
+<p style="">每种存储引擎都有其使用的场景。如，InnoDB 提供了事务支持、行级锁定和外键约束等特性，适用于需要高并发和复杂事务处理的场景；而 MyISAM 则提供了全文索引和压缩功能，适用于只读或大量读操作的场景。</p>
+<hr>
+<p style="">那么，执行一条SQL查询语句，期间发生了什么？</p>
+<h3 style="" id="%E8%BF%9E%E6%8E%A5%E5%99%A8%EF%BC%9A"><strong>连接器：</strong> </h3>
+<p style="">处理客户端的连接请求，验证用户身份，管理连接的生命周期。</p>
+<h3 style="" id="%E6%9F%A5%E8%AF%A2%E7%BC%93%E5%AD%98%EF%BC%9A"><strong>查询缓存：</strong> </h3>
+<p style="">如果直接命中缓存，则直接返回结果，否则继续往下执行。在 MySQL 8.0 版本后移除。</p>
+<h3 style="" id="%E8%A7%A3%E6%9E%90%E5%99%A8%EF%BC%9A"><strong>解析器：</strong> </h3>
+<p style="">负责对SQL语句进行词法、语法分析，并将SQL语句解析成语法树，为后续的优化和执行做准备。</p>
+<h3 style="" id="%E6%89%A7%E8%A1%8Csql%EF%BC%9A"><strong>执行SQL：</strong></h3>
+<p style="margin-left: 24px!important;">1. <strong>预处理阶段（Prepare）：</strong> 验证表或字段是否存在；扩展通配符（如把 <code>SELECT *</code>
+  扩展为具体的列名）。</p>
+<p style="margin-left: 24px!important;">2. <strong>优化阶段（Optimize）</strong>：选择最佳的查询执行计划。这个过程会考虑多种因素，如索引的使用、连接顺序、聚合操作等。
+</p>
+<p style="margin-left: 24px!important;">3. <strong>执行阶段（Execute）</strong>：根据优化后的执行计划来执行 SQL
+  查询语句，将结果返回客户端（如果涉及多个表，还会进行整合处理）。</p>
+<p style=""></p>
+<div class="html-edited">
+  <div style="text-align: center; margin-top: 30px;">
+    以上是结合学习<a href="https://xiaolincoding.com/mysql/base/how_select.html" target="_blank">小林coding</a>
+    自己也概括的一些总结</div>
+</div>
+<p style=""><img src="https://image.kangyaocoding.top/blog/post/2024-04-18T22:04:21-eqwlcglv.webp"
+    alt="2024-04-18T22:04:21-eqwlcglv.webp" width="100%" height="100%" style="display: inline-block"></p>
