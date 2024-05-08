@@ -1,2 +1,2 @@
-# myBlog
-博客文章记录
+# My-Blog-Repository
+- 博客文章记录
