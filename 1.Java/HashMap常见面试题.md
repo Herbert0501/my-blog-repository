@@ -19,7 +19,7 @@ Java面试必备知识点，HashMap常见知识点(Java interview essential know
 - 如果当前数组的长度小于 64 ，则进行扩容，而不是先转化为红黑树，以减少搜索的时间。
 
 结构大概的样子：
-![2024-05-11T14:57:25-ebcbyxdq.webp](https://image.kangyaocoding.top/blog/post/2024-05-11T14:57:25-ebcbyxdq.webp)
+![2024-05-11T17:03:35-nwfcchke.webp](https://image.kangyaocoding.top/blog/post/2024-05-11T17:03:35-nwfcchke.webp)
 
 ## 解决Hash冲突的方法有哪些，HashMap用哪种
 
