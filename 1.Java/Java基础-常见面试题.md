@@ -11,7 +11,7 @@ halo:
 ---
 Java 基础-常见面试题(Java Fundamentals - Common Interview Questions)
 
-## [面向对象的三大特征](#面向对象的三大特征)
+## 面向对象的三大特征
 
 ### 封装
 
@@ -160,7 +160,7 @@ public class PolymorphismDemo {
     }
 }
 ```
-## [抽象类和接口有什么相同点和区别？](#抽象类和接口有什么相同点和区别？)
+## 抽象类和接口有什么相同点和区别？
 
 💞**相同点**：
 - 都不能被实例化。
@@ -175,7 +175,7 @@ public class PolymorphismDemo {
 - **实现和继承**：一个类可以实现多个接口，但只能基础一个抽象类。
 - **访问控制**：接口默认方法是`public`，抽象类可以有不同的修饰符（如`public`、`protected`）
 
-## [Java 深拷贝、浅拷贝、引用拷贝](#java-深拷贝、浅拷贝、引用拷贝)
+## Java深拷贝、浅拷贝、引用拷贝
 
 👍直接举例：有两个对象，一个`Person`对象和一个`Car`对象。`Person`对象有一个属性是`Car`类型的引用，也就是说这个`Person`对象“拥有”一辆`Car`。
 
@@ -284,7 +284,7 @@ Person anotherPerson = myPerson; // 引用拷贝
 
 **上图**：
 ![2024-04-27T12:10:06-tlvuoqch.webp](https://image.kangyaocoding.top/blog/post/2024-04-27T12:10:06-tlvuoqch.webp)
-## [Java 中 == 和 equals() 的区别](#java-中-%3D%3D-和-equals()-的区别)
+## Java中\==和equals()的区别
 
 **基本数据类型与对象类型**：
 
@@ -297,14 +297,14 @@ Person anotherPerson = myPerson; // 引用拷贝
 **空值比较**：
 - 使用 `==` 可以直接比较两个对象是否为 null，例如 `obj1 == null`。而 equals() 方法则不能用于与 null 进行比较，否则会抛出 `NullPointerException`。
 
-## [为什么重写 equals() 时必须重写 hashCode() 方法？](#为什么重写-equals()-时必须重写-hashcode()-方法？)
+## 为什么重写equals()时必须重写hashCode()方法？
 
-#### 首先，hashCode() 有什么用？
+#### 首先，hashCode()有什么用？
 
 - **快速查找**：哈希表通过 hashCode() 生成的哈希值来快速定位对象。
 - **数据结构实现**：很多 Java 的数据结构（如 `HashMap`, `HashSet`, `Hashtable`, `LinkedHashMap` 等）都依赖 hashCode() 方法。
 - **集合中保证唯一性**：在 HashSet 、或作为 HashMap 键时，`hashCode()` 和 `equals()` 方法一起确定对象的唯一性。首先，通过 hashCode() 确定对象可能的存储位置；然后，通过 equals() 方法来确定对象是否真的相等。
-#### 两个对象有相同的 hashCode 值并不意味它们一定相等
+#### 两个对象有相同的hashCode值并不意味它们一定相等
 
 1. **哈希碰撞（Hash Collisions）**：  
     指不同的对象生成相同的哈希值。这是因为哈希函数将无限大的输入空间映射到有限大的输出空间（通常是整数），所以必然存在多个不同的输入产生相同的输出。好的哈希函数尽量减少这种碰撞的发生，但完全避免碰撞是不可能的。
@@ -324,7 +324,7 @@ Person anotherPerson = myPerson; // 引用拷贝
 2. 不可重复性指集合中不能包含通过 equals() 方法判断为相等的元素，需要重写 equals() 和 hashCode() 方法。
 
 
-## [String、StringBuffer、StringBuilder有什么区别？](#string、stringbuffer、stringbuilder有什么区别？)
+## String、StringBuffer、StringBuilder有什么区别
 
 #### 1.可变性与不可变性
 - String：**不可变**。一旦创建了一个 String 对象，它的内容就不能被改变。如果对其进行修改，实际上是新建了一个 String 对象，是线程安全的（因为读取操作不会修改 String 对象的状态）。
@@ -345,7 +345,7 @@ Person anotherPerson = myPerson; // 引用拷贝
 - **StringBuffer**：在需要频繁修改且需要线程安全的情况下使用。
 - **StringBuilder**：在单线程下，需要频繁的修改情况下使用。
 
-## [字符串使用“+”还是 StringBuilder拼接？](#字符串使用“%2B”还是-stringbuilder拼接？)
+## 字符串使用“+”还是StringBuilder拼接？
 
 #### 使用“+”操作符拼接字符串
 
@@ -375,7 +375,7 @@ Person anotherPerson = myPerson; // 引用拷贝
 - 对于简单的、不频繁的字符串拼接，或者当性能不是关键因素时，使用“+”操作符。
 - 对于复杂的、频繁的字符串拼接，尤其在循环中，使用`StringBuilder`。
 
-## [字符串常量池](#字符串常量池)
+## 字符串常量池
 
 字符串常量池是Java虚拟机（JVM）为了提升性能和减少内存开销而专门开辟的一块区域，主要用于存储字符串常量。字符串常量池是由 String 类私有的维护，其主要作用是**避免字符串的重复创建**。
 
@@ -407,30 +407,30 @@ public class Test {
 }
 ```
 
-## [Java中volatile和synchronized区别](#java中volatile和synchronized区别)
+## Java中volatile和synchronized区别
 
 ### 1. **volatile**
 
-`volatile`是一种轻量级的同步机制，它主要有两个作用：
+一种轻量级的同步机制，它主要有两个作用：
 
-1. **可见性**：当一个共享变量被`volatile`修饰时，它会保证修改的值会立即被更新到主内存，当有其他线程需要读取时，它会去主内存中读取新值。确保了多个线程之间能看到共享变量的最新值。
-2. **禁止指令重排序**：`volatile`关键字能禁止指令重排序优化，确保了程序的有序性。
+1. **可见性**：当一个共享变量被 volatile 修饰时，它会保证修改的值会立即被更新到主内存，当有其他线程需要读取时，它会去主内存中读取新值。确保了多个线程之间能看到共享变量的最新值。
+2. **禁止指令重排序**：volatile 关键字能禁止指令重排序优化，确保了程序的有序性。
 
-但是，`volatile`并不能保证复合操作的原子性。如，对于`i++`这样的操作，它实际上包含了读取-修改-写入三步骤，而`volatile`不能确保这三个步骤在一个不可分割的、原子性的操作中完成。
+但是，volatile 并不能保证复合操作的原子性。如，对于 i++ 这样的操作，它实际上包含了读取-修改-写入三步骤，而 volatile 不能确保这三个步骤在一个不可分割的、原子性的操作中完成。
 
 ### 2. **synchronized**
 
-`synchronized`是一种重量级的同步机制，它可用来修饰方法或代码块。当一个线程进入一个对象的`synchronized(this)`方法或代码块时，其他线程对该对象的所有其他`synchronized(this)`方法或代码块的访问将被阻塞。
+一种重量级的同步机制，它可用来修饰方法或代码块。当一个线程进入一个对象的`synchronized(this)`方法或代码块时，其他线程对该对象的所有其他`synchronized(this)`方法或代码块的访问将被阻塞。
 
-`synchronized`的作用主要：
+synchronized 的作用主要：
 
-1. **原子性**：`synchronized`通过互斥锁的方式保证同一时刻只有一个线程可以执行某个方法或代码块，确保了这些操作是原子的。
+1. **原子性**：synchronized 通过互斥锁的方式保证同一时刻只有一个线程可以执行某个方法或代码块，确保了这些操作是原子的。
 2. **可见性**：当一个线程释放锁时，会将修改后的共享变量的值刷新到主内存。因此，当其他线程获取到该锁时，就可以看到共享变量的最新值。
-3. **禁止指令重排序**：和`volatile`一样，`synchronized`也能禁止指令重排序优化。
+3. **禁止指令重排序**：和 volatile 一样，synchronized 也能禁止指令重排序优化。
 
 ### 3. **区别**
 
-- **粒度**：`volatile`用于修饰变量，而`synchronized`用于修饰方法或代码块。
-- **原子性**：`volatile`不保证复合操作的原子性，而`synchronized`可以保证被它修饰的代码块的原子性。
-- **性能**：`volatile`是轻量级的同步机制，性能开销较小；而`synchronized`是重量级的同步机制，性能开销较大。
-- **使用场景**：`volatile`主要用于实现可见性和禁止指令重排序；而`synchronized`则主要用于实现原子性和可见性。
+- **粒度**： volatile 用于修饰变量，而 synchronized 用于修饰方法或代码块。
+- **原子性**：volatile 不保证复合操作的原子性，而 synchronized 可以保证被它修饰的代码块的原子性。
+- **性能**：volatile 是轻量级的同步机制，性能开销较小；而 synchronized 是重量级的同步机制，性能开销较大。
+- **使用场景**： volatile 主要用于实现可见性和禁止指令重排序；而 synchronized 则主要用于实现原子性和可见性。
