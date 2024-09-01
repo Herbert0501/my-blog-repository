@@ -18,7 +18,7 @@ HashMap 是 Java 中常用的基于哈希表的数据结构，用于存储键值
 
 **基本原理：**
 
-`HashMap` 的底层是一个数组，每个数组元素称为一个桶。每个桶内部可以存储多个键值对，这些键值对通过链表或红黑树来组织。 当我们插入一个键值对时，首先会计算键的哈希值，然后通过 `hash % 数组长度` 得到存储位置的索引。如果该位置为空，就直接插入；如果不为空，就会通过链表或红黑树来处理哈希冲突。
+`HashMap` 的底层是一个数组，每个数组元素称为一个桶。每个桶内部可以存储多个键值对，这些键值对通过链表或红黑树来组织。 当我们插入一个键值对时，首先会计算键的哈希值，然后通过 `hash % (数组长度-1)` 得到存储位置的索引。如果该位置为空，就直接插入；如果不为空，就会通过链表或红黑树来处理哈希冲突。
 
 **扩容机制：**
 
@@ -160,6 +160,12 @@ Java 提供了四种主要的线程池实现，分别是 `FixedThreadPool`、`Ca
     - **适用场景**：适用于需要确保顺序执行各个任务的场景。
     - **使用方法**：`ExecutorService singleThreadExecutor = Executors.newSingleThreadExecutor();`
 
+**拒绝策略详解**：
+1. **AbortPolicy**：当线程池无法接受新的任务时，该策略会直接抛出一个 `RejectedExecutionException` 异常，通知提交任务的线程任务被拒绝了。
+2. **CallerRunsPolicy**：当线程池无法接受新的任务时，该策略不会丢弃任务或者抛出异常，而是将任务交给调用线程（即提交任务的线程）来执行。这可能会导致调用线程阻塞，直到任务完成。
+3. **DiscardPolicy**：当线程池无法接受新的任务时，该策略会直接丢弃任务，不做任何处理，也不抛出异常。
+4. **DiscardOldestPolicy**：当线程池无法接受新的任务时，该策略会丢弃等待队列中最旧的未处理任务，然后尝试重新提交被拒绝的任务。
+
 ## 7. 线程池核心参数设置的技巧
 
 1. **核心线程数（corePoolSize）**：对于CPU密集型任务，设置为CPU核心数；对于I/O密集型任务，可以设置为CPU核心数的两倍或更多。
@@ -171,7 +177,7 @@ Java 提供了四种主要的线程池实现，分别是 `FixedThreadPool`、`Ca
 
 ## 8. synchronized 、AQS 、volatile
 
-**synchronized**：Java语言内置的同步机制，用于确保在同一时刻只有一个线程可以执行某个代码块，从而防止竞争条件（race conditions）。`synchronized` 关键字确保了进入代码块的线程获取了对象的监视器（monitor），从而实现了互斥访问。
+**synchronized**：Java语言内置的同步机制，用于确保在同一时刻只有一个线程可以执行某个代码块，从而防止竞争条件。`synchronized` 关键字确保了进入代码块的线程获取了对象的监视器，从而实现了互斥访问。
 
 **AQS**：用于构建锁和同步器的框架。它是Java并发包（java.util.concurrent）中许多同步类的基础，如 `ReentrantLock`、`Semaphore`、`CountDownLatch` 等。
 **AQS 核心思想**： AQS 使用一个FIFO队列来管理争用资源的线程。它通过一个整数状态（state）来表示同步状态，并提供了两种模式：独占模式（exclusive）和共享模式（shared）。
@@ -186,24 +192,92 @@ Java 提供了四种主要的线程池实现，分别是 `FixedThreadPool`、`Ca
 - **AQS**：用于构建复杂同步器，灵活高效，但需深入理解。
 - **volatile**：用于变量的可见性和有序性，轻量级但不保证原子性。
 
+**拓展知识**：什么是可重入锁，有哪些？
+
 ## 9. CurrentHashMap的原理
 
 ConcurrentHashMap 是 Java 中用于并发编程的一个线程安全的哈希表实现。它主要用于在多线程环境下确保数据一致性和操作的高效性。
 
-**主要原理**：
+1. **分段锁机制（Segmented Locking，Java 7 及以前）**
+- 在 Java 7 及以前的版本中，`ConcurrentHashMap` 将整个哈希表分成了多个段（Segment），每个段本质上是一个小型的哈希表，并且各自独立地维护自己的锁。只要不同的线程访问的数据处于不同的段中，它们就不会互相阻塞。
+- 每个 Segment 维护一个独立的锁。
+- 插入、删除和更新操作只锁定与键相关的那个段，而不是整个哈希表。
 
-1. **分段锁定（Segment Locking）**：在 Java 8 之前，`ConcurrentHashMap` 采用分段锁定的机制，将整个哈希表分成多个段，每个段有自己的锁。这样可以减少锁的粒度，提高并发性能。多个线程可以同时访问不同段的数据而不发生冲突。 
-2. **CAS 操作（Compare-And-Swap）**：Java 8 之后，`ConcurrentHashMap` 采用了基于 CAS 操作的无锁算法。CAS 操作是一种硬件级别的原子操作，能够在一个 CPU 指令周期内完成比较和交换，确保线程安全。 
- 3. **红黑树（Red-Black Tree）**：为了优化哈希冲突，`ConcurrentHashMap` 引入了红黑树。当一个桶中的元素数量超过一定阈值时（默认为8），链表会转换为红黑树，提升查找和插入的效率。 
- 4. **扩容（Rehashing）**：`ConcurrentHashMap` 支持并行扩容。当负载因子超过阈值时，多个线程可以同时进行数据迁移，减少扩容带来的性能瓶颈。
+2. **CAS 操作和 `synchronized` 锁（Java 8 及以后）**
 
-**总结**：
+- 在 Java 8 中，移除了 `Segment` 概念，转而使用了更细粒度的控制和无锁操作来实现更高效的并发处理。
+- **CAS 操作（Compare-And-Swap）：** 对于某些操作（如插入新节点），`ConcurrentHashMap` 使用 CAS 操作来避免锁的使用。例如，`putIfAbsent` 方法使用 CAS 直接将新节点插入到链表或树中。
+- **`synchronized` 锁：** 在必须使用锁的地方（如扩容、链表转换为红黑树、put操作），`ConcurrentHashMap` 采用内置的 `synchronized` 锁。这些锁是细粒度的，只锁定冲突的 bin（桶），而不是整个哈希表。
 
-ConcurrentHashMap 是 Java 中用于并发编程的一个线程安全的哈希表实现，主要用于在多线程环境下确保数据一致性和操作的高效性。在 Java 8 之前，它通过分段锁定将整个哈希表分成多个段，每个段有自己的锁，从而提高并发性能。Java 8 之后，它改用基于 CAS 操作的无锁算法，利用硬件级别的原子操作来确保线程安全。此外，为了优化哈希冲突，它引入了红黑树，当一个桶中的元素超过一定数量时，会将链表转换为红黑树。扩容时，ConcurrentHashMap 支持并行扩容，多个线程可以同时进行数据迁移，减少性能瓶颈。它适用于高并发环境下频繁读写共享数据的场景，如缓存和实时数据处理等。
+3. **读操作的无锁设计**
+- 大多数读操作（如 `get`）是无锁的，因为它们只需要从现有结构中读取数据，不涉及修改数据结构。
+
+**Java 8时 的部分源码**：
+
+```Java
+final V putVal(K key, V value, boolean onlyIfAbsent) {
+    // 省略其他代码...
+    for (Node<K,V>[] tab = table;;) {
+        Node<K,V> f; int n, i, fh;
+        if (tab == null || (n = tab.length) == 0)
+            tab = initTable();
+        else if ((f = tabAt(tab, i = (n - 1) & hash)) == null) {
+            if (casTabAt(tab, i, null, new Node<K,V>(hash, key, value, null)))
+                break; // 如果桶为空，直接使用CAS插入新节点
+        }
+        else if ((fh = f.hash) == MOVED)
+            tab = helpTransfer(tab, f); // 如果正在扩容，帮助扩容
+        else {
+            V oldVal = null;
+            synchronized (f) {  // 锁定桶的头节点，进入同步块
+                if (tabAt(tab, i) == f) {
+                    if (fh >= 0) {  // 如果是链表
+                        binCount = 1;
+                        for (Node<K,V> e = f;; ++binCount) {
+                            K ek;
+                            if (e.hash == hash &&
+                                ((ek = e.key) == key ||
+                                 (ek != null && key.equals(ek)))) {
+                                oldVal = e.val;
+                                if (!onlyIfAbsent)
+                                    e.val = value;
+                                break;
+                            }
+                            Node<K,V> pred = e;
+                            if ((e = e.next) == null) {
+                                pred.next = new Node<K,V>(hash, key, value, null);
+                                break;
+                            }
+                        }
+                    }
+                    else if (f instanceof TreeBin) {  // 如果是红黑树
+                        Node<K,V> p;
+                        binCount = 2;
+                        if ((p = ((TreeBin<K,V>)f).putTreeVal(hash, key, value)) != null) {
+                            oldVal = p.val;
+                            if (!onlyIfAbsent)
+                                p.val = value;
+                        }
+                    }
+                }
+            }
+            if (binCount != 0) {
+                if (binCount >= TREEIFY_THRESHOLD)
+                    treeifyBin(tab, i);  // 如果链表节点过多，树化
+                if (oldVal != null)
+                    return oldVal;
+                break;
+            }
+        }
+    }
+    addCount(1L, binCount);
+    return null;
+}
+```
 
 **拓展知识**：
 - 讲讲CAS的原理？什么是ABA问题？怎么解决？
-- HashMap线程安全吗？currentHashMap为什么线程安全？
+- HashMap线程安全吗？ConcurrentHashMap为什么线程安全？它是如何扩容的？
 
 ## 10. 动态代理
 
