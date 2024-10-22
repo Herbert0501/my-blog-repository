@@ -18,9 +18,11 @@ tags:
 
 在 Linux 的默认路径中：
 
-| Variable_name |      Value       |
-| :-----------: | :--------------: |
-|   datadir   | /var/lib/mysql |
+| Variable_name |     Value      |
+| :-----------: | :------------: |
+|    datadir    | /var/lib/mysql |
+|               |                |
+|               |                |
 
 在 Window 的默认路径中：
 
