@@ -88,6 +88,30 @@ halo:
 
 由于服务端接口需要 Nginx 转发，所以在 Nginx 端口还需要关闭分块解码、关闭转发缓存、关闭应答缓存，这样展示了一个渐进式的效果。
 
+```nginx
+server {
+    listen 80;
+    server_name example.com;
+
+    location / {
+        # 关闭分块解码
+        proxy_buffering off;
+        proxy_request_buffering off;
+
+        # 关闭转发缓存
+        proxy_cache off;
+
+        # 关闭应答缓存
+        add_header Cache-Control "no-store, no-cache, must-revalidate, post-check=0, pre-check=0";
+        add_header Pragma "no-cache";
+        expires -1;
+
+        # 其他配置，比如代理设置
+        proxy_pass http://backend;
+    }
+}
+```
+
 ### 11. 你的项目中对接了 ChatGPT 和 ChatGLM 两个模型，那么使用了什么设计模式？
 
 关于多个模型服务，在项目中定义了一个通信渠道策略接口，接口方法返回统一的格式数据。多款 OpenAI 服务分别实现自己的接口处理。之后多个实现的策略模式注入到 Map 中，Key 是一个枚举值。当服务器选择不同的模型进行问答时，就会根据模型的枚举值，从中选择对应的策略处理类。这样也方便了后续更多模型的拓展。

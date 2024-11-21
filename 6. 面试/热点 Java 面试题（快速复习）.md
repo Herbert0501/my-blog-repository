@@ -60,7 +60,6 @@ public class HashMapExample {
 5. **内存空间占用:**
 	- **ArrayList：** 在列表的结尾会预留一定的容量空间，会导致一定量的内存浪费。
 	- **LinkedList：** 每个元素（节点）都需要额外的空间来存储指向前后节点的引用。
-	- **总结：** 因此，`LinkedList` 的每个元素比 `ArrayList` 的元素占用更多的内存。
 
 ## 3. JVM的内存区域
 
