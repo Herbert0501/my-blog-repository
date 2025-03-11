@@ -188,6 +188,58 @@ halo:
    git push <remote> --tags
    ```
 
+### 设置用户名和邮箱
+
+1. **设置全局用户名**
+   ```sh
+   git config --global user.name "你的用户名"
+   ```
+
+2. **设置全局邮箱**
+   ```sh
+   git config --global user.email "你的邮箱地址"
+   ```
+
+3. **设置本地用户名（仅对当前仓库生效）**
+   ```sh
+   git config --local user.name "你的用户名"
+   ```
+
+4. **设置本地邮箱（仅对当前仓库生效）**
+   ```sh
+   git config --local user.email "你的邮箱地址"
+   ```
+
+5. **查看全局配置**
+   ```sh
+   git config --global --list
+   ```
+
+6. **查看本地配置**
+   ```sh
+   git config --local --list
+   ```
+
+7. **删除全局用户名配置**
+   ```sh
+   git config --global --unset user.name
+   ```
+
+8. **删除全局邮箱配置**
+   ```sh
+   git config --global --unset user.email
+   ```
+
+9. **删除本地用户名配置**
+   ```sh
+   git config --local --unset user.name
+   ```
+
+10. **删除本地邮箱配置**
+    ```sh
+    git config --local --unset user.email
+    ```
+
 参考 [Git 官方文档](https://git-scm.com/doc) 
 
 如果您觉得今天的文章对您有帮助，我相信您一定会喜欢我的博客。
